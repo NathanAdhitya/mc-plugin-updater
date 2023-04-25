@@ -1,0 +1,64 @@
+{
+  "$id": "./schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "mc-plugins schema",
+  "description": "schema for defining mc plugins",
+  "type": "object",
+  "required": ["server", "plugins"],
+  "properties": {
+    "server": {
+      "description": "server properties",
+      "type": "object",
+      "required": ["uri", "username", "password", "pluginsPath"],
+      "properties": {
+        "uri": {
+          "description": "server sftp uri",
+          "type": "string"
+        },
+        "username": {
+          "description": "server sftp username",
+          "type": "string"
+        },
+        "password": {
+          "description": "server sftp password",
+          "type": "string"
+        },
+        "pluginsPath": {
+          "description": "server plugins path",
+          "type": "string"
+        }
+      }
+    },
+    "plugins": {
+      "description": "plugins to be installed",
+      "type": "array",
+      "required": ["name", "url", "type"],
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "plugin name",
+            "type": "string"
+          },
+          "version": {
+            "description": "plugin version",
+            "type": "string"
+          },
+          "url": {
+            "description": "plugin download url",
+            "type": "string"
+          },
+          "type": {
+            "description": "plugin source",
+            "type": "string",
+            "enum": ["direct", "github", "spiget", "jenkins"]
+          },
+          "match": {
+            "description": "pattern to match when getting API",
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

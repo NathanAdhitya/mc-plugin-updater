@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "chalk": "^5.2.0",
+    "node-fetch": "^3.3.1",
+    "ora": "^6.3.0",
+    "ssh2-sftp-client": "^9.0.4",
+    "typescript": "^5.0.4",
+    "yaml": "^2.2.2",
+    "zod": "^3.21.4"
+  },
+  "scripts": {
+    "start": "ts-node --esm src/index.ts"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^18.16.0",
+    "@types/ssh2-sftp-client": "^9.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.59.1",
+    "@typescript-eslint/parser": "^5.59.1",
+    "eslint": "^8.39.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "ts-node": "^10.9.1"
+  }
+}
