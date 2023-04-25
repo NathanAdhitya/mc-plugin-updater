@@ -1,3 +1,5 @@
 node_modules
 plugins
-data/servers
+data/servers/*
+!data/servers/example-server
+!/**/.gitkeep

@@ -1,0 +1,36 @@
+# yaml-language-server: $schema=../../schema.json
+server:
+  uri: sftp://localhost
+  username: username
+  password: password
+  pluginsPath: /plugins
+plugins:
+  - name: SkinsRestorer
+    url: https://ci.codemc.io/job/SkinsRestorer/job/SkinsRestorerX-DEV/lastStableBuild/
+    match: "SkinsRestorer.jar"
+    type: "jenkins"
+
+  - name: BungeeSafeguard
+    url: https://github.com/Luluno01/BungeeSafeguard/releases/download/v3.1/BungeeSafeguard-3.1-SNAPSHOT-all.jar
+    match: "BungeeSafeguard-*.jar"
+    type: "direct"
+
+  - name: BungeeTabListPlus
+    url: https://ci.codecrafter47.de/job/BungeeTabListPlus/lastStableBuild/
+    match: "BungeeTabListPlus-*.jar"
+    type: "jenkins"
+
+  - name: AuthMeBungee
+    url: https://ci.codemc.io/view/All/job/AuthMe/job/AuthMeBungee/lastStableBuild/
+    match: "AuthMeBungee-*.jar"
+    type: "jenkins"
+
+  - name: FastLoginBungee
+    url: https://ci.codemc.io/job/Games647/job/FastLogin/lastStableBuild/
+    match: "FastLoginBungee.jar"
+    type: "jenkins"
+
+  - name: LuckPerms
+    url: https://ci.lucko.me/job/LuckPerms/lastStableBuild/
+    match: "LuckPerms-Bungee-*.jar"
+    type: "jenkins"
