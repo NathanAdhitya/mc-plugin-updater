@@ -23,9 +23,12 @@ export class JenkinsPluginSource extends PluginSource {
     super(name, uri, "jenkins", regex);
   }
 
-  async downloadPlugin(destination: string): Promise<void> {
+  async downloadPlugin(destination: string): Promise<string> {
     // Get latest version URL
     const url = await this.getLatestVersionUrl();
+    const pluginFileNameGuess = url.split("/").pop() as string;
+
+    destination = destination + "/" + pluginFileNameGuess;
 
     // Fetch latest version
     const response = await fetch(new URL(url, this.uri + "/artifact/"));
@@ -41,7 +44,7 @@ export class JenkinsPluginSource extends PluginSource {
         reject(err);
       });
       fileStream.on("finish", () => {
-        resolve();
+        resolve(pluginFileNameGuess);
       });
     });
   }

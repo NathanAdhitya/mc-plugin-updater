@@ -11,7 +11,7 @@ export abstract class PluginSource {
     public readonly regex: RegExp
   ) {}
 
-  abstract downloadPlugin(destination: string): Promise<void>;
+  abstract downloadPlugin(destination: string): Promise<string>;
   abstract isServerVersionOutdated(nameOnServer: string): Promise<boolean>;
   abstract getLatestVersionUrl(): Promise<string>;
 }

@@ -10,6 +10,7 @@ import { pluginYamlSchema } from "./schema.js";
 
 import { DirectPluginSource } from "./modules/pluginSources/Direct.js";
 import { JenkinsPluginSource } from "./modules/pluginSources/Jenkins.js";
+import { SpigetPluginSource } from "./modules/pluginSources/Spiget.js";
 
 function escapeRegExp(string: string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
@@ -40,6 +41,8 @@ const parsedData = pluginYamlSchema.parse(data);
 
 // Connect via SFTP
 const sftp = new Client();
+// @ts-expect-error Increase the max listeners to 100, hacky way.
+sftp.client.setMaxListeners(100);
 const spinner = ora("Connecting to server").start();
 
 // Parse server uri
@@ -96,6 +99,8 @@ const pluginClasses = pluginPatterns.map((v) => {
       return new DirectPluginSource(v.name, v.url, v.regex);
     case "jenkins":
       return new JenkinsPluginSource(v.name, v.url, v.regex);
+    case "spiget":
+      return new SpigetPluginSource(v.name, v.url, v.regex);
     default:
       throw new Error(`Plugin type ${v.type} is not supported.`);
   }
@@ -120,11 +125,8 @@ await Promise.all(
   pluginClasses.map(async (v) => {
     console.log(`Downloading ${v.name}...`);
     // Extract plugin file name from url provided by class
-    const pluginUrl = await v.getLatestVersionUrl();
-    const pluginFileName = pluginUrl.split("/").pop() as string;
-
-    await v.downloadPlugin(
-      `./data/servers/${serverName}/plugins/${pluginFileName}`
+    const pluginFileName = await v.downloadPlugin(
+      `./data/servers/${serverName}/plugins`
     );
 
     console.log(`Downloaded ${v.name}.`);

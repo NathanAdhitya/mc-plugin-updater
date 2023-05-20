@@ -11,9 +11,30 @@ export class DirectPluginSource extends PluginSource {
     super(name, uri, "direct", regex);
   }
 
-  async downloadPlugin(destination: string): Promise<void> {
+  async downloadPlugin(destination: string): Promise<string> {
     // Fetch latest version
     const response = await fetch(this.uri);
+
+    // Guess plugin name or infer from filename header
+    const pluginFileNameGuess1 = this.uri.split("/").pop() as string;
+    const pluginFileNameGuess2 = response.url.split("/").pop() as string;
+    const pluginFileNameHeader = response.headers.get("content-disposition");
+
+    const pluginFileNameCandidates = [];
+    if (this.regex.test(pluginFileNameGuess1))
+      pluginFileNameCandidates.push(pluginFileNameGuess1);
+    if (this.regex.test(pluginFileNameGuess2))
+      pluginFileNameCandidates.push(pluginFileNameGuess2);
+    if (pluginFileNameHeader && this.regex.test(pluginFileNameHeader))
+      pluginFileNameCandidates.push(pluginFileNameHeader);
+
+    if (pluginFileNameCandidates.length === 0)
+      throw new Error(`Could not infer plugin name for ${this.name}`);
+
+    const pluginFileName = pluginFileNameCandidates[0];
+
+    // Set plugin name
+    destination = destination + "/" + pluginFileName;
 
     if (response.body === null)
       throw new Error(`No response body found for ${this.name}`);
@@ -26,7 +47,7 @@ export class DirectPluginSource extends PluginSource {
         reject(err);
       });
       fileStream.on("finish", () => {
-        resolve();
+        resolve(pluginFileName);
       });
     });
   }
