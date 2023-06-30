@@ -86,11 +86,11 @@ const filteredPluginListNoMatch = currentPluginList.filter(
   (v) => !filteredPluginListMatch.some((w) => w.name === v.name)
 );
 
-console.log("Plugins that doesn't match the pattern:");
-console.log(filteredPluginListNoMatch.map((v) => v.name));
+// console.log("Plugins that doesn't match the pattern:");
+// console.log(filteredPluginListNoMatch.map((v) => v.name));
 
-console.log("Plugins that match the pattern:");
-console.log(filteredPluginListMatch.map((v) => v.name));
+// console.log("Plugins that match the pattern:");
+// console.log(filteredPluginListMatch.map((v) => v.name));
 
 // Map plugins to classes
 const pluginClasses = pluginPatterns.map((v) => {
@@ -107,13 +107,11 @@ const pluginClasses = pluginPatterns.map((v) => {
 });
 
 // Delete matched plugins in server async
-await Promise.all(
-  filteredPluginListMatch.map(async (v) => {
-    console.log(`Deleting ${v.name}...`);
-    await sftp.delete(path.join(parsedData.server.pluginsPath, v.name));
-    console.log(`Deleted ${v.name}.`);
-  })
-);
+for (const v of filteredPluginListMatch) {
+  console.log(`Deleting ${v.name}...`);
+  await sftp.delete(path.join(parsedData.server.pluginsPath, v.name));
+  console.log(`Deleted ${v.name}.`);
+}
 
 // Create /plugins folder in this server folder if nonexistant
 await fs.mkdir(`./data/servers/${serverName}/plugins`, {

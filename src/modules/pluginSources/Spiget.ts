@@ -49,11 +49,17 @@ export class SpigetPluginSource extends PluginSource {
   }
 
   async getLatestFilename(): Promise<string> {
-    return this.name + "-" + (await this.getSpigetResourceVersion(this.uri));
+    return (
+      this.name + "-" + (await this.getSpigetResourceVersion(this.uri)) + ".jar"
+    );
   }
 
   async downloadPlugin(destination: string): Promise<string> {
-    const pluginFileNameCandidates = [await this.getLatestFilename()];
+    const pluginFileNameCandidates = [];
+
+    const latestFilename = await this.getLatestFilename();
+    if (this.regex.test(latestFilename))
+      pluginFileNameCandidates.push(latestFilename);
 
     if (pluginFileNameCandidates.length === 0)
       throw new Error(`Could not infer plugin name for ${this.name}`);
